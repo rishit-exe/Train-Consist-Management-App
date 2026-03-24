@@ -85,9 +85,24 @@ public class Train {
 
         System.out.println("\nOrdered consist operations completed... (UC4)");
 
+        System.out.println("\n\n========================================");
+        System.out.println("  Preserve Insertion Order of Bogies (UC5)");
+        System.out.println("=========================================\n");
 
+        Set<String> formation = new LinkedHashSet<>();
+        formation.add("Engine");
+        formation.add("Sleeper");
+        formation.add("Cargo");
+        formation.add("Guard");
+        //Duplicating entries for test
+        formation.add("Guard");
+        formation.add("Cargo");
 
+        System.out.println("Final Train Formation:");
+        System.out.println(formation);
 
+        System.out.println("\nNote:\nLinkedHashSet preserves the insertion order and removes duplicates automatically.\n");
+        System.out.println("Formation setup completed... (UC5)");
 
 
     }
