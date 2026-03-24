@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Train {
     public static void main(String[] args) {
@@ -40,6 +42,28 @@ public class Train {
         System.out.println(passengerBogies);
 
         System.out.println("\nCRUD operations(UC2) completed successfully...");
+
+
+        System.out.println("\n\n===========================");
+        System.out.println("Track Unique Bogie IDs (UC3)");
+        System.out.println("===========================\n");
+
+        Set<String> bogies = new HashSet<>();
+        bogies.add("BG101");
+        bogies.add("BG102");
+        bogies.add("BG103");
+        bogies.add("BG104");
+        //duplicating the entries
+        bogies.add("BG101");
+        bogies.add("BG102");
+
+
+        System.out.println("Bogie IDs After Insertion: ");
+        System.out.println(bogies);
+
+        System.out.println("\nNote:\nDuplicates are automatically ignored by the HashSet.\n");
+
+        System.out.println("Uniqueness validation completed... (UC3)");
 
 
     }
