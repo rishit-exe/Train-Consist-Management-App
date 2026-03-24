@@ -104,6 +104,20 @@ public class Train {
         System.out.println("\nNote:\nLinkedHashSet preserves the insertion order and removes duplicates automatically.\n");
         System.out.println("Formation setup completed... (UC5)");
 
+        System.out.println("\n\n========================================");
+        System.out.println("  Map Bogie to Capacity (HashMap) (UC6)");
+        System.out.println("========================================\n");
 
+        Map<String, Integer> capacityMap = new HashMap<>();
+        capacityMap.put("First Class", 24);
+        capacityMap.put("Cargo", 120);
+        capacityMap.put("Sleeper", 72);
+        capacityMap.put("AC Chair", 56);
+
+        System.out.println("Bogie Capacity Details:");
+        for (Map.Entry<String, Integer> entry : capacityMap.entrySet()) {
+            System.out.println(entry.getKey() + " -> " + entry.getValue());
+        }
+        System.out.println("\nBogie-capacity mapping completed... (UC6)");
     }
 }
