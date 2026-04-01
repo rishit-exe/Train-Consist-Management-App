@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Stream;
 import java.util.zip.CheckedOutputStream;
 
 class Bogie{
@@ -12,6 +13,13 @@ class Bogie{
 }
 
 public class Train {
+
+    public static List<Bogie> filterBogiesByCapacity(List<Bogie> bogies, int threshold) {
+        return bogies.stream()
+                .filter(b -> b.capacity > threshold)
+                .toList();
+    }
+
     public static void main(String[] args) {
         System.out.println("========================================================");
         System.out.println("       === Train Consist Management App === ");
@@ -154,6 +162,24 @@ public class Train {
         }
 
         System.out.println("Sorting completed... (UC7)");
+
+        System.out.println("\n\n========================================");
+        System.out.println("  Filter Passenger Bogies Using Streams (UC8)");
+        System.out.println("========================================\n");
+
+        Stream<Bogie> stream = bogies.stream();
+        List<Bogie> filteredList = filterBogiesByCapacity(bogies, 60);
+
+        System.out.println("Filtered Bogies (Capacity > 60)");
+
+        filteredList.forEach(b ->
+                        System.out.println(b.name + " - " + b.capacity));
+
+        System.out.println("\nFiltering completed... (UC8)");
+
+
+
+
 
     }
 }
