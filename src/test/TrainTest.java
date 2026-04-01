@@ -1,9 +1,6 @@
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -193,6 +190,76 @@ class TrainTest {
 
         Map<String, List<Bogie>> grouped =
                 Train.groupBogiesByType(bogies);
+
+        assertEquals(originalSize, bogies.size());
+        assertEquals(4, bogies.size());
+    }
+
+
+
+
+
+    //UC10: total seating capacity
+    @Test
+    void testReduce_TotalSeatCalculation() {
+        int total = Train.aggregateCapacity(getSampleBogies());
+
+        assertEquals(232, total);
+    }
+
+    @Test
+    void testReduce_MultipleBogiesAggregation() {
+        int total = Train.aggregateCapacity(getSampleBogies());
+
+        assertEquals(232, total);
+    }
+
+    @Test
+    void testReduce_SingleBogieCapacity() {
+        List<Bogie> bogies = Collections.singletonList(
+                new Bogie("Sleeper", 72)
+        );
+
+        int total = Train.aggregateCapacity(bogies);
+
+        assertEquals(72, total);
+    }
+
+    @Test
+    void testReduce_EmptyBogieList() {
+        List<Bogie> bogies = new ArrayList<>();
+
+        int total = Train.aggregateCapacity(bogies);
+
+        assertEquals(0, total);
+    }
+
+    @Test
+    void testReduce_CorrectCapacityExtraction() {
+        List<Bogie> bogies = getSampleBogies();
+
+        int total = Train.aggregateCapacity(bogies);
+
+        int expected = bogies.stream().mapToInt(b -> b.capacity).sum();
+
+        assertEquals(expected, total);
+    }
+
+    @Test
+    void testReduce_AllBogiesIncluded() {
+        List<Bogie> bogies = getSampleBogies();
+
+        int total = Train.aggregateCapacity(bogies);
+
+        assertEquals(232, total);
+    }
+
+    @Test
+    void testReduce_OriginalListUnchanged() {
+        List<Bogie> bogies = getSampleBogies();
+        int originalSize = bogies.size();
+
+        Train.aggregateCapacity(bogies);
 
         assertEquals(originalSize, bogies.size());
         assertEquals(4, bogies.size());

@@ -26,6 +26,11 @@ public class Train {
                 .collect(Collectors.groupingBy(b->b.name));
     }
 
+    public static int aggregateCapacity(List<Bogie> bogies){
+        return bogies.stream()
+                .map(b->b.capacity).reduce(0, Integer::sum);
+    }
+
     public static void main(String[] args) {
         System.out.println("========================================================");
         System.out.println("       === Train Consist Management App === ");
@@ -204,8 +209,12 @@ public class Train {
         System.out.println("\nGrouping completed... (UC9)");
 
 
+        System.out.println("\n\n========================================");
+        System.out.println("  Count Total Seats in Train (reduce) (UC10)");
+        System.out.println("========================================\n");
 
+        System.out.println("Total Seating Capacity of Train: " + aggregateCapacity(bogies));
 
-
+        System.out.println("\nAggregation completed... (UC10)");
     }
 }
