@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.CheckedOutputStream;
@@ -29,6 +31,17 @@ public class Train {
     public static int aggregateCapacity(List<Bogie> bogies){
         return bogies.stream()
                 .map(b->b.capacity).reduce(0, Integer::sum);
+    }
+
+    private static final Pattern TRAIN_PATTERN = Pattern.compile("TRN-\\d{4}");
+    private static final Pattern CARGO_PATTERN = Pattern.compile("PET-[A-Z]{2}");
+
+    public static boolean isValidTrainId(String trainId) {
+        return trainId != null && TRAIN_PATTERN.matcher(trainId).matches();
+    }
+
+    public static boolean isValidCargoCode(String cargoCode) {
+        return cargoCode != null && CARGO_PATTERN.matcher(cargoCode).matches();
     }
 
     public static void main(String[] args) {
@@ -216,5 +229,26 @@ public class Train {
         System.out.println("Total Seating Capacity of Train: " + aggregateCapacity(bogies));
 
         System.out.println("\nAggregation completed... (UC10)");
+
+
+
+        System.out.println("\n\n========================================");
+        System.out.println("  Validate Train ID & Cargo Codes (Regex) (UC11)");
+        System.out.println("========================================\n");
+
+        Scanner obj = new Scanner(System.in);
+
+        System.out.print("Enter Train ID (Format: TRN-1234): ");
+        String trainId = obj.nextLine();
+
+        System.out.print("Enter Cargo Code (Format: PET-AB): ");
+        String cargoCode = obj.nextLine();
+
+        System.out.println("Train ID Valid: " + isValidTrainId(trainId));
+        System.out.println("Cargo Code Valid: " + isValidCargoCode(cargoCode));
+
+        obj.close();
+
+        System.out.println("\nValidation completed... (UC11)");
     }
 }

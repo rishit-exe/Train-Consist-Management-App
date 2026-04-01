@@ -264,4 +264,57 @@ class TrainTest {
         assertEquals(originalSize, bogies.size());
         assertEquals(4, bogies.size());
     }
+
+
+
+
+
+    //UC11: Validation Check
+    @Test
+    void testRegex_ValidTrainID() {
+        assertTrue(Train.isValidTrainId("TRN-1234"));
+    }
+
+    @Test
+    void testRegex_InvalidTrainIDFormat() {
+        assertFalse(Train.isValidTrainId("TRAIN12"));
+        assertFalse(Train.isValidTrainId("TRN12A"));
+        assertFalse(Train.isValidTrainId("1234-TRN"));
+    }
+
+    @Test
+    void testRegex_ValidCargoCode() {
+        assertTrue(Train.isValidCargoCode("PET-AB"));
+    }
+
+    @Test
+    void testRegex_InvalidCargoCodeFormat() {
+        assertFalse(Train.isValidCargoCode("PET-ab"));
+        assertFalse(Train.isValidCargoCode("PET123"));
+        assertFalse(Train.isValidCargoCode("AB-PET"));
+    }
+
+    @Test
+    void testRegex_TrainIDDigitLengthValidation() {
+        assertFalse(Train.isValidTrainId("TRN-123"));
+        assertFalse(Train.isValidTrainId("TRN-12345"));
+    }
+
+    @Test
+    void testRegex_CargoCodeUppercaseValidation() {
+        assertFalse(Train.isValidCargoCode("PET-ab"));
+    }
+
+    @Test
+    void testRegex_EmptyInputHandling() {
+        assertFalse(Train.isValidTrainId(""));
+        assertFalse(Train.isValidCargoCode(""));
+    }
+
+    @Test
+    void testRegex_ExactPatternMatch() {
+        assertFalse(Train.isValidTrainId("TRN-1234XYZ"));
+        assertFalse(Train.isValidCargoCode("PET-AB123"));
+    }
+
 }
