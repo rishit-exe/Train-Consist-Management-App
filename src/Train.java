@@ -1,4 +1,15 @@
 import java.util.*;
+import java.util.zip.CheckedOutputStream;
+
+class Bogie{
+    String name;
+    int capacity;
+
+    Bogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
+    }
+}
 
 public class Train {
     public static void main(String[] args) {
@@ -44,18 +55,18 @@ public class Train {
         System.out.println("Track Unique Bogie IDs (UC3)");
         System.out.println("===========================\n");
 
-        Set<String> bogies = new HashSet<>();
-        bogies.add("BG101");
-        bogies.add("BG102");
-        bogies.add("BG103");
-        bogies.add("BG104");
+        Set<String> bogieIds = new HashSet<>();
+        bogieIds.add("BG101");
+        bogieIds.add("BG102");
+        bogieIds.add("BG103");
+        bogieIds.add("BG104");
         //duplicating the entries
-        bogies.add("BG101");
-        bogies.add("BG102");
+        bogieIds.add("BG101");
+        bogieIds.add("BG102");
 
 
         System.out.println("Bogie IDs After Insertion: ");
-        System.out.println(bogies);
+        System.out.println(bogieIds);
 
         System.out.println("\nNote:\nDuplicates are automatically ignored by the HashSet.\n");
 
@@ -104,6 +115,7 @@ public class Train {
         System.out.println("\nNote:\nLinkedHashSet preserves the insertion order and removes duplicates automatically.\n");
         System.out.println("Formation setup completed... (UC5)");
 
+        /* -------------------UC6_Deprecated------------------
         System.out.println("\n\n========================================");
         System.out.println("  Map Bogie to Capacity (HashMap) (UC6)");
         System.out.println("========================================\n");
@@ -118,6 +130,30 @@ public class Train {
         for (Map.Entry<String, Integer> entry : capacityMap.entrySet()) {
             System.out.println(entry.getKey() + " -> " + entry.getValue());
         }
-        System.out.println("\nBogie-capacity mapping completed... (UC6)");
+        System.out.println("\nBogie-capacity mapping completed... (UC6)");*/
+
+        System.out.println("\n\n========================================");
+        System.out.println("  Sort Bogies by Capacity (Comparator) (UC7)");
+        System.out.println("========================================\n");
+
+        List<Bogie> bogies = new ArrayList<>();
+        bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("Cargo", 120));
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+
+        System.out.println("Before sorting");
+        for (Bogie b : bogies) {
+            System.out.printf("%s  ->  %d\n", b.name, b.capacity);
+        }
+
+        bogies.sort(Comparator.comparingInt(b->b.capacity));
+        System.out.println("\nAfter sorting");
+        for (Bogie b : bogies) {
+            System.out.printf("%s  ->  %d\n", b.name, b.capacity);
+        }
+
+        System.out.println("Sorting completed... (UC7)");
+
     }
 }
