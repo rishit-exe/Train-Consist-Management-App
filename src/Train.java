@@ -15,6 +15,25 @@ class Bogie{
 
 public class Train {
 
+    static class InvalidCapacityException extends Exception {
+        InvalidCapacityException(String message) {
+            super(message);
+        }
+    }
+
+    static class PassengerBogie {
+        String type;
+        int capacity;
+
+        PassengerBogie(String type, int capacity) throws InvalidCapacityException {
+            if (capacity <= 0) {
+                throw new InvalidCapacityException("Capacity must be greater than zero");
+            }
+            this.type = type;
+            this.capacity = capacity;
+        }
+    }
+
     public static List<Bogie> filterBogiesByCapacity(List<Bogie> bogies, int threshold) {
         return bogies.stream()
                 .filter(b -> b.capacity > threshold)
@@ -140,8 +159,10 @@ public class Train {
         System.out.println("\nAfter Inserting 'Pantry Car' at position 2: ");
         System.out.println(trainConsist);
 
-       trainConsist.removeFirst();
-       trainConsist.removeLast();
+    //    trainConsist.removeFirst();
+    //    trainConsist.removeLast();
+
+       trainConsist.remove(0); trainConsist.remove(trainConsist.size() - 1);
        
         System.out.println("\nAfter removing First and Last Bogie: ");
         System.out.println(trainConsist);
@@ -337,6 +358,23 @@ public class Train {
         System.out.println("Stream Execution Time (ns): " + (streamEnd - streamStart));
 
         System.out.println("\nPerformance benchmarking completed... (UC13)");
+
+
+        System.out.println("\n\n========================================");
+        System.out.println("  Handle Invalid Bogie Capacity (UC14)");
+        System.out.println("========================================\n");
+
+        try {
+            PassengerBogie validBogie = new PassengerBogie("Sleeper", 72);
+            System.out.println("Created Bogie: " + validBogie.type + " -> " + validBogie.capacity);
+
+            PassengerBogie invalidBogie = new PassengerBogie("General", 0);
+            System.out.println("Created Bogie: " + invalidBogie.type + " -> " + invalidBogie.capacity);
+        } catch (InvalidCapacityException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        System.out.println("\nException handling completed... (UC14)");
 
     }
 }

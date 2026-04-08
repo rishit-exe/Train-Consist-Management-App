@@ -453,4 +453,51 @@ class TrainTest {
         assertEquals(loopResult.size(), streamResult.size());
     }
 
+    //UC14: Invalid capacity exception handling
+    @Test
+    void testException_ValidCapacityCreation() {
+        assertDoesNotThrow(() -> new Train.PassengerBogie("Sleeper", 72));
+    }
+
+    @Test
+    void testException_NegativeCapacityThrowsException() {
+        assertThrows(Train.InvalidCapacityException.class,
+                () -> new Train.PassengerBogie("Sleeper", -10));
+    }
+
+    @Test
+    void testException_ZeroCapacityThrowsException() {
+        assertThrows(Train.InvalidCapacityException.class,
+                () -> new Train.PassengerBogie("Sleeper", 0));
+    }
+
+    @Test
+    void testException_ExceptionMessageValidation() {
+        Train.InvalidCapacityException exception = assertThrows(Train.InvalidCapacityException.class,
+                () -> new Train.PassengerBogie("Sleeper", 0));
+
+        assertEquals("Capacity must be greater than zero", exception.getMessage());
+    }
+
+    @Test
+    void testException_ObjectIntegrityAfterCreation() throws Train.InvalidCapacityException {
+        Train.PassengerBogie bogie = new Train.PassengerBogie("Sleeper", 72);
+
+        assertEquals("Sleeper", bogie.type);
+        assertEquals(72, bogie.capacity);
+    }
+
+    @Test
+    void testException_MultipleValidBogiesCreation() {
+        assertDoesNotThrow(() -> {
+            Train.PassengerBogie b1 = new Train.PassengerBogie("Sleeper", 72);
+            Train.PassengerBogie b2 = new Train.PassengerBogie("AC Chair", 56);
+            Train.PassengerBogie b3 = new Train.PassengerBogie("First Class", 24);
+
+            assertNotNull(b1);
+            assertNotNull(b2);
+            assertNotNull(b3);
+        });
+    }
+
 }
