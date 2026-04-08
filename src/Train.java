@@ -1,9 +1,7 @@
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.zip.CheckedOutputStream;
 
 class Bogie{
     String name;
@@ -42,6 +40,27 @@ public class Train {
 
     public static boolean isValidCargoCode(String cargoCode) {
         return cargoCode != null && CARGO_PATTERN.matcher(cargoCode).matches();
+    }
+
+    static class GoodsBogie {
+        String type;
+        String cargo;
+
+
+        GoodsBogie(String type, String cargo){
+            this.type = type;
+            this.cargo = cargo;
+        }
+    }
+
+    static boolean allMatch(List<GoodsBogie> goodsBogies) {
+        return goodsBogies.stream().allMatch(bogie ->
+                bogie != null
+                        && bogie.type != null
+                        && bogie.cargo != null
+                        && (!"Cylindrical".equalsIgnoreCase(bogie.type)
+                        || "Petroleum".equalsIgnoreCase(bogie.cargo))
+        );
     }
 
     public static void main(String[] args) {
@@ -121,8 +140,9 @@ public class Train {
         System.out.println("\nAfter Inserting 'Pantry Car' at position 2: ");
         System.out.println(trainConsist);
 
-        trainConsist.removeFirst();
-        trainConsist.removeLast();
+       trainConsist.removeFirst();
+       trainConsist.removeLast();
+       
         System.out.println("\nAfter removing First and Last Bogie: ");
         System.out.println(trainConsist);
 
@@ -250,5 +270,32 @@ public class Train {
         obj.close();
 
         System.out.println("\nValidation completed... (UC11)");
+
+
+
+        System.out.println("\n\n========================================");
+        System.out.println("  Safety Compliance Check for Goods Bogies (UC12)");
+        System.out.println("========================================\n");
+
+        List<GoodsBogie> goodsBogies = new ArrayList<>();
+
+        goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        goodsBogies.add(new GoodsBogie("Open", "Coal"));
+        goodsBogies.add(new GoodsBogie("Box", "Grain"));
+        goodsBogies.add(new GoodsBogie("Cylindrical", "Coal"));
+
+        System.out.println("Goods Bogies in Train: ");
+        for(GoodsBogie bogieX : goodsBogies){
+            System.out.println(bogieX.cargo + " -> " + bogieX.type);
+        }
+
+        boolean safetyCompliant = allMatch(goodsBogies);
+        System.out.println("\nSafety Compliance Status: " + safetyCompliant);
+        System.out.println(safetyCompliant
+            ? "Train formation is SAFE."
+            : "Train formation is NOT SAFE.");
+
+        System.out.println("\nSafety Validation completed... (UC12)");
+
     }
 }

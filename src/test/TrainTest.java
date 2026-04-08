@@ -317,4 +317,51 @@ class TrainTest {
         assertFalse(Train.isValidCargoCode("PET-AB123"));
     }
 
+    //UC12: safety compliance validation
+    @Test
+    void testSafety_AllBogiesValid() {
+        List<Train.GoodsBogie> goodsBogies = List.of(
+                new Train.GoodsBogie("Cylindrical", "Petroleum"),
+                new Train.GoodsBogie("Open", "Coal"),
+                new Train.GoodsBogie("Box", "Grain")
+        );
+
+        assertTrue(Train.isGoodsFormationSafe(goodsBogies));
+    }
+
+    @Test
+    void testSafety_CylindricalWithInvalidCargo() {
+        List<Train.GoodsBogie> goodsBogies = List.of(
+                new Train.GoodsBogie("Cylindrical", "Coal")
+        );
+
+        assertFalse(Train.isGoodsFormationSafe(goodsBogies));
+    }
+
+    @Test
+    void testSafety_NonCylindricalBogiesAllowed() {
+        List<Train.GoodsBogie> goodsBogies = List.of(
+                new Train.GoodsBogie("Open", "Coal"),
+                new Train.GoodsBogie("Box", "Grain")
+        );
+
+        assertTrue(Train.isGoodsFormationSafe(goodsBogies));
+    }
+
+    @Test
+    void testSafety_MixedBogiesWithViolation() {
+        List<Train.GoodsBogie> goodsBogies = List.of(
+                new Train.GoodsBogie("Cylindrical", "Petroleum"),
+                new Train.GoodsBogie("Open", "Coal"),
+                new Train.GoodsBogie("Cylindrical", "Grain")
+        );
+
+        assertFalse(Train.isGoodsFormationSafe(goodsBogies));
+    }
+
+    @Test
+    void testSafety_EmptyBogieList() {
+        assertTrue(Train.isGoodsFormationSafe(Collections.emptyList()));
+    }
+
 }
