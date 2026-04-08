@@ -116,6 +116,16 @@ class TrainTest {
         );
     }
 
+    private List<Bogie> filterWithLoop(List<Bogie> bogies, int threshold) {
+        List<Bogie> filtered = new ArrayList<>();
+        for (Bogie bogie : bogies) {
+            if (bogie.capacity > threshold) {
+                filtered.add(bogie);
+            }
+        }
+        return filtered;
+    }
+
     @Test
     void testGrouping_BogiesGroupedByType() {
         Map<String, List<Bogie>> grouped =
@@ -326,7 +336,7 @@ class TrainTest {
                 new Train.GoodsBogie("Box", "Grain")
         );
 
-        assertTrue(Train.isGoodsFormationSafe(goodsBogies));
+        assertTrue(Train.allMatch(goodsBogies));
     }
 
     @Test
@@ -335,7 +345,7 @@ class TrainTest {
                 new Train.GoodsBogie("Cylindrical", "Coal")
         );
 
-        assertFalse(Train.isGoodsFormationSafe(goodsBogies));
+        assertFalse(Train.allMatch(goodsBogies));
     }
 
     @Test
@@ -345,7 +355,7 @@ class TrainTest {
                 new Train.GoodsBogie("Box", "Grain")
         );
 
-        assertTrue(Train.isGoodsFormationSafe(goodsBogies));
+        assertTrue(Train.allMatch(goodsBogies));
     }
 
     @Test
@@ -356,12 +366,91 @@ class TrainTest {
                 new Train.GoodsBogie("Cylindrical", "Grain")
         );
 
-        assertFalse(Train.isGoodsFormationSafe(goodsBogies));
+        assertFalse(Train.allMatch(goodsBogies));
     }
 
     @Test
     void testSafety_EmptyBogieList() {
-        assertTrue(Train.isGoodsFormationSafe(Collections.emptyList()));
+        assertTrue(Train.allMatch(Collections.emptyList()));
+    }
+
+    //UC13: Performance comparison tests
+    @Test
+    void testLoopFilteringLogic() {
+        List<Bogie> bogies = List.of(
+                new Bogie("A", 80),
+                new Bogie("B", 60),
+                new Bogie("C", 61),
+                new Bogie("D", 40)
+        );
+
+        List<Bogie> loopResult = filterWithLoop(bogies, 60);
+
+        assertEquals(2, loopResult.size());
+        assertTrue(loopResult.stream().allMatch(b -> b.capacity > 60));
+    }
+
+    @Test
+    void testStreamFilteringLogic() {
+        List<Bogie> bogies = List.of(
+                new Bogie("A", 80),
+                new Bogie("B", 60),
+                new Bogie("C", 61),
+                new Bogie("D", 40)
+        );
+
+        List<Bogie> streamResult = Train.filterBogiesByCapacity(bogies, 60);
+
+        assertEquals(2, streamResult.size());
+        assertTrue(streamResult.stream().allMatch(b -> b.capacity > 60));
+    }
+
+    @Test
+    void testLoopAndStreamResultsMatch() {
+        List<Bogie> bogies = List.of(
+                new Bogie("A", 80),
+                new Bogie("B", 60),
+                new Bogie("C", 61),
+                new Bogie("D", 120),
+                new Bogie("E", 59)
+        );
+
+        List<Bogie> loopResult = filterWithLoop(bogies, 60);
+        List<Bogie> streamResult = Train.filterBogiesByCapacity(bogies, 60);
+
+        assertEquals(loopResult.size(), streamResult.size());
+    }
+
+    @Test
+    void testExecutionTimeMeasurement() {
+        List<Bogie> bogies = new ArrayList<>();
+        for (int i = 0; i < 10000; i++) {
+            bogies.add(new Bogie("T" + i, i % 200));
+        }
+
+        long start = System.nanoTime();
+        List<Bogie> streamResult = Train.filterBogiesByCapacity(bogies, 60);
+        long end = System.nanoTime();
+
+        long elapsed = end - start;
+
+        assertTrue(elapsed > 0);
+        assertNotNull(streamResult);
+    }
+
+    @Test
+    void testLargeDatasetProcessing() {
+        List<Bogie> bogies = new ArrayList<>();
+        for (int i = 0; i < 100000; i++) {
+            bogies.add(new Bogie("T" + i, i % 200));
+        }
+
+        List<Bogie> loopResult = filterWithLoop(bogies, 60);
+        List<Bogie> streamResult = Train.filterBogiesByCapacity(bogies, 60);
+
+        assertNotNull(loopResult);
+        assertNotNull(streamResult);
+        assertEquals(loopResult.size(), streamResult.size());
     }
 
 }

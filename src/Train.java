@@ -297,5 +297,46 @@ public class Train {
 
         System.out.println("\nSafety Validation completed... (UC12)");
 
+
+        System.out.println("\n\n==============================================");
+        System.out.println("  Performance Comparison (Loops vs Streams) (UC13)");
+        System.out.println("==============================================\n");
+
+        List<Bogie> benchmarkBogies = new ArrayList<>();
+        String[] bogieTypes = {"Open", "Box", "Cylindrical", "Flat", "Covered"};
+        Random random = new Random(13);
+
+        for (int i = 0; i < 100000; i++) {
+            String type = bogieTypes[i % bogieTypes.length];
+            int capacityForBenchmark = 20 + random.nextInt(181);
+            benchmarkBogies.add(new Bogie(type, capacityForBenchmark));
+        }
+
+        int threshold = 100;
+
+        long loopStart = System.nanoTime();
+        List<Bogie> loopFiltered = new ArrayList<>();
+        for (Bogie bogie : benchmarkBogies) {
+            if (bogie.capacity > threshold) {
+                loopFiltered.add(bogie);
+            }
+        }
+        long loopEnd = System.nanoTime();
+
+        long streamStart = System.nanoTime();
+        List<Bogie> streamFiltered = benchmarkBogies.stream()
+                .filter(bogie -> bogie.capacity > threshold)
+                .toList();
+        long streamEnd = System.nanoTime();
+
+        if (loopFiltered.size() != streamFiltered.size()) {
+            System.out.println("Benchmark warning: result size mismatch detected.");
+        }
+
+        System.out.println("Loop Execution Time (ns): " + (loopEnd - loopStart));
+        System.out.println("Stream Execution Time (ns): " + (streamEnd - streamStart));
+
+        System.out.println("\nPerformance benchmarking completed... (UC13)");
+
     }
 }
