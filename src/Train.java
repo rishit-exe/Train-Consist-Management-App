@@ -135,6 +135,26 @@ public class Train {
         return false;
     }
 
+    static boolean binarySearch(String[] arr, String searchKey){
+        int start = 0, end = arr.length - 1;
+
+        while(start <= end){
+            int mid= start + (end - start) / 2;
+
+            int comparison = searchKey.compareTo(arr[mid]);
+
+            if(comparison == 0)
+                return true;
+
+            if(comparison > 0){
+                start = mid + 1;
+            }else{
+                end = mid - 1;
+            }
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         System.out.println("========================================================");
         System.out.println("       === Train Consist Management App === ");
@@ -212,11 +232,11 @@ public class Train {
         System.out.println("\nAfter Inserting 'Pantry Car' at position 2: ");
         System.out.println(trainConsist);
 
-    //    trainConsist.removeFirst();
-    //    trainConsist.removeLast();
+        //    trainConsist.removeFirst();
+        //    trainConsist.removeLast();
 
-       trainConsist.remove(0); trainConsist.remove(trainConsist.size() - 1);
-       
+        trainConsist.remove(0); trainConsist.remove(trainConsist.size() - 1);
+
         System.out.println("\nAfter removing First and Last Bogie: ");
         System.out.println(trainConsist);
 
@@ -293,7 +313,7 @@ public class Train {
         System.out.println("Filtered Bogies (Capacity > 60)");
 
         filteredList.forEach(b ->
-                        System.out.println(b.name + " - " + b.capacity));
+                System.out.println(b.name + " - " + b.capacity));
 
         System.out.println("\nFiltering completed... (UC8)");
 
@@ -374,8 +394,8 @@ public class Train {
         boolean safetyCompliant = allMatch(goodsBogies);
         System.out.println("\nSafety Compliance Status: " + safetyCompliant);
         System.out.println(safetyCompliant
-            ? "Train formation is SAFE."
-            : "Train formation is NOT SAFE.");
+                ? "Train formation is SAFE."
+                : "Train formation is NOT SAFE.");
 
         System.out.println("\nSafety Validation completed... (UC12)");
 
@@ -479,6 +499,7 @@ public class Train {
 
 
 
+        /* Linear Search Method UC18 - deprecated
         System.out.println("\n\n========================================");
         System.out.println("  Linear Search for Bogie ID (Array-Based Searching) (UC18)");
         System.out.println("========================================\n");
@@ -507,7 +528,27 @@ public class Train {
         else
             System.out.println("\nBogie " + searchId + " NOT found in train consist.");
 
-        System.out.println("\nSearch completed... (UC18)");
+        System.out.println("\nSearch completed... (UC18)"); */
+
+        System.out.println("\n\n========================================");
+        System.out.println("  Binary Search for Bogie ID (Optimized Searching) (UC19)");
+        System.out.println("========================================\n");
+
+        String[] bogieIds2 = {"BG101", "BG205", "BG309", "BG412", "BG550"};
+
+        System.out.println("Sorted Bogie IDs");
+        System.out.println(Arrays.toString(bogieIds2));
+
+        String searchKey = "BG309";
+
+        if(binarySearch(bogieIds2, searchKey)){
+            System.out.println("\nBogie " + searchKey + " found using Binary Search");
+        }else{
+            System.out.println("\nBogie  " + searchKey + "NOT found using Binary Search");
+        }
+
+        System.out.println("\nSearch completed... (UC19)");
+
 
     }
 }

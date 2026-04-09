@@ -11,6 +11,7 @@ class TrainTest {
         List<Bogie> bogies = List.of(
                 new Bogie("Sleeper", 72),
                 new Bogie("Cargo", 120),
+                new Bogie("AC", 56),
                 new Bogie("AC", 56)
         );
 
@@ -674,5 +675,53 @@ class TrainTest {
         Set<String> bogies = Set.of("BG101");
 
         assertTrue(Train.searchBogie(bogies, "BG101"));
+    }
+
+
+
+    //UC19 - Binary Search Method
+    @Test
+    void testBinarySearch_BogieFound() {
+        String[] bogies = {"BG101","BG205","BG309","BG412","BG550"};
+        assertTrue(Train.binarySearch(bogies, "BG309"));
+    }
+
+    @Test
+    void testBinarySearch_BogieNotFound() {
+        String[] bogies = {"BG101","BG205","BG309","BG412","BG550"};
+        assertFalse(Train.binarySearch(bogies, "BG999"));
+    }
+
+    @Test
+    void testBinarySearch_FirstElementMatch() {
+        String[] bogies = {"BG101","BG205","BG309","BG412","BG550"};
+        assertTrue(Train.binarySearch(bogies, "BG101"));
+    }
+
+    @Test
+    void testBinarySearch_LastElementMatch() {
+        String[] bogies = {"BG101","BG205","BG309","BG412","BG550"};
+        assertTrue(Train.binarySearch(bogies, "BG550"));
+    }
+
+    @Test
+    void testBinarySearch_SingleElementArray() {
+        String[] bogies = {"BG101"};
+        assertTrue(Train.binarySearch(bogies, "BG101"));
+    }
+
+    @Test
+    void testBinarySearch_EmptyArray() {
+        String[] bogies = {};
+        assertFalse(Train.binarySearch(bogies, "BG101"));
+    }
+
+    @Test
+    void testBinarySearch_UnsortedInputHandled() {
+        String[] bogies = {"BG309","BG101","BG550","BG205","BG412"};
+
+        Arrays.sort(bogies);
+
+        assertTrue(Train.binarySearch(bogies, "BG205"));
     }
 }
