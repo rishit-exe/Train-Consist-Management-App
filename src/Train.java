@@ -154,6 +154,29 @@ public class Train {
         }
         return false;
     }
+    static boolean binarySearchWithExceptionHandler(String[] arr, String searchKey){
+        if (arr == null || arr.length == 0) {
+            throw new IllegalStateException("No bogies available in the train. Cannot perform search");
+        }
+
+        int start = 0, end = arr.length - 1;
+
+        while(start <= end){
+            int mid= start + (end - start) / 2;
+
+            int comparison = searchKey.compareTo(arr[mid]);
+
+            if(comparison == 0)
+                return true;
+
+            if(comparison > 0){
+                start = mid + 1;
+            }else{
+                end = mid - 1;
+            }
+        }
+        return false;
+    }
 
     public static void main(String[] args) {
         System.out.println("========================================================");
@@ -531,7 +554,7 @@ public class Train {
         System.out.println("\nSearch completed... (UC18)"); */
 
         System.out.println("\n\n========================================");
-        System.out.println("  Binary Search for Bogie ID (Optimized Searching) (UC19)");
+        System.out.println("  Binary Search for Bogie ID (Optimized Searching) & Exception Handling during search operations (UC19) & (UC20)");
         System.out.println("========================================\n");
 
         String[] bogieIds2 = {"BG101", "BG205", "BG309", "BG412", "BG550"};
@@ -541,13 +564,14 @@ public class Train {
 
         String searchKey = "BG309";
 
-        if(binarySearch(bogieIds2, searchKey)){
+        if(binarySearchWithExceptionHandler(bogieIds2, searchKey)){
             System.out.println("\nBogie " + searchKey + " found using Binary Search");
         }else{
             System.out.println("\nBogie  " + searchKey + "NOT found using Binary Search");
         }
 
-        System.out.println("\nSearch completed... (UC19)");
+        System.out.println("\nSearch completed... (UC19) & (UC20)");
+
 
 
     }

@@ -724,4 +724,56 @@ class TrainTest {
 
         assertTrue(Train.binarySearch(bogies, "BG205"));
     }
+
+
+    //UC20 - Exception handling during search operations
+    @Test
+    void testSearch_ThrowsExceptionWhenEmpty() {
+        String[] bogies = {};
+        String searchKey = "BG101";
+
+        assertThrows(IllegalStateException.class, () -> {
+            Train.binarySearchWithExceptionHandler(bogies, searchKey);
+        });
+    }
+
+    @Test
+    void testSearch_AllowsSearchWhenDataExists() {
+        String[] bogies = {"BG101", "BG205"};
+        String searchKey = "BG101";
+
+        assertDoesNotThrow(() -> {
+            Train.binarySearchWithExceptionHandler(bogies, searchKey);
+        });
+    }
+
+    @Test
+    void testSearch_BogieFoundAfterValidation() {
+        String[] bogies = {"BG101", "BG205", "BG309"};
+        String searchKey = "BG205";
+
+        boolean result = Train.binarySearchWithExceptionHandler(bogies, searchKey);
+
+        assertTrue(result);
+    }
+
+    @Test
+    void testSearch_BogieNotFoundAfterValidation() {
+        String[] bogies = {"BG101", "BG205", "BG309"};
+        String searchKey = "BG999";
+
+        boolean result = Train.binarySearchWithExceptionHandler(bogies, searchKey);
+
+        assertFalse(result);
+    }
+
+    @Test
+    void testSearch_SingleElementValidCase() {
+        String[] bogies = {"BG101"};
+        String searchKey = "BG101";
+
+        boolean result = Train.binarySearchWithExceptionHandler(bogies, searchKey);
+
+        assertTrue(result);
+    }
 }
