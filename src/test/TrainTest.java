@@ -637,4 +637,42 @@ class TrainTest {
 
         assertArrayEquals(expected, input);
     }
+
+
+
+    //UC18 - searching bogieIds
+    @Test
+    void testSearch_BogieFound() {
+        Set<String> bogies = Set.of("BG101","BG205","BG309","BG412","BG550");
+
+        assertTrue(Train.searchBogie(bogies, "BG309"));
+    }
+
+    @Test
+    void testSearch_BogieNotFound() {
+        Set<String> bogies = Set.of("BG101","BG205","BG309","BG412","BG550");
+
+        assertFalse(Train.searchBogie(bogies, "BG999"));
+    }
+
+    @Test
+    void testSearch_FirstElementMatch() {
+        Set<String> bogies = Set.of("BG101","BG205","BG309","BG412","BG550");
+
+        assertTrue(Train.searchBogie(bogies, "BG101"));
+    }
+
+    @Test
+    void testSearch_LastElementMatch() {
+        Set<String> bogies = Set.of("BG101","BG205","BG309","BG412","BG550");
+
+        assertTrue(Train.searchBogie(bogies, "BG550"));
+    }
+
+    @Test
+    void testSearch_SingleElementArray() {
+        Set<String> bogies = Set.of("BG101");
+
+        assertTrue(Train.searchBogie(bogies, "BG101"));
+    }
 }

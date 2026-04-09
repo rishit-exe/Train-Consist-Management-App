@@ -126,6 +126,15 @@ public class Train {
         }
     }
 
+    static boolean searchBogie(Set<String> bogieIds, String searchId) {
+        for (String id : bogieIds) {
+            if (id.equals(searchId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         System.out.println("========================================================");
         System.out.println("       === Train Consist Management App === ");
@@ -467,5 +476,38 @@ public class Train {
         System.out.println(Arrays.toString(bogieNames));
 
         System.out.println("\nArrays.sort() Sorting completed... (UC17)");
+
+
+
+        System.out.println("\n\n========================================");
+        System.out.println("  Linear Search for Bogie ID (Array-Based Searching) (UC18)");
+        System.out.println("========================================\n");
+
+        bogieIds.add("BG101");
+        bogieIds.add("BG205");
+        bogieIds.add("BG309");
+        bogieIds.add("BG412");
+        bogieIds.add("BG550");
+
+//        String[] bogieIds = {"BG101", "BG205", "BG309", "BG412", "BG550"};
+
+        String searchId = "BG309";
+
+        System.out.println("Available Bogie IDs: ");
+        for(String id : bogieIds){
+            System.out.println(id);
+        }
+
+        boolean found = false;
+
+        found = searchBogie(bogieIds, searchId);
+
+        if(found)
+            System.out.println("\nBogie " + searchId + " found in train consist.");
+        else
+            System.out.println("\nBogie " + searchId + " NOT found in train consist.");
+
+        System.out.println("\nSearch completed... (UC18)");
+
     }
 }
