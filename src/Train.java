@@ -452,5 +452,20 @@ public class Train {
 
 
         System.out.println("\n\nSorting completed... (UC16)");
+
+        System.out.println("\n\n========================================");
+        System.out.println("  Sort Bogie Names Using Arrays.sort() (UC17)");
+        System.out.println("========================================\n");
+
+        String[] bogieNames = {"Sleeper", "AC Chair", "First Class", "General", "Luxury"};
+        System.out.println("Original Bogie Names: ");
+        System.out.println(Arrays.toString(bogieNames));
+
+        Arrays.sort(bogieNames);
+
+        System.out.println("\nSorted Bogie Names(Alphabetical): ");
+        System.out.println(Arrays.toString(bogieNames));
+
+        System.out.println("\nArrays.sort() Sorting completed... (UC17)");
     }
 }
