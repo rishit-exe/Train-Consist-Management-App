@@ -108,6 +108,24 @@ public class Train {
         }
     }
 
+    public static void bubbleSort(int[] capacities) {
+        for (int i = 0; i < capacities.length - 1; i++) {
+            boolean swapped = false;
+
+            for (int j = 0; j < capacities.length - i - 1; j++) {
+                if (capacities[j] > capacities[j + 1]) {
+                    int temp = capacities[j];
+                    capacities[j] = capacities[j + 1];
+                    capacities[j + 1] = temp;
+                    swapped = true;
+                }
+            }
+
+            if (!swapped)
+                break;
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println("========================================================");
         System.out.println("       === Train Consist Management App === ");
@@ -413,5 +431,26 @@ public class Train {
 
         System.out.println("\nRuntime handling completed... (UC15)");
 
+
+        System.out.println("\n\n========================================");
+        System.out.println("  Sort Passenger Bogies by Capacity (Bubble Sort – Algorithm Intro) (UC16)");
+        System.out.println("========================================\n");
+
+        int[] capacities = {72, 56, 24, 70, 60};
+
+        System.out.println("Original Capacities: ");
+        for(int c : capacities){
+            System.out.print(c + " ");
+        }
+
+        bubbleSort(capacities);
+
+        System.out.println("\n\nSorted Capacities (Ascending): ");
+        for(int c : capacities){
+            System.out.print(c + " ");
+        }
+
+
+        System.out.println("\n\nSorting completed... (UC16)");
     }
 }
