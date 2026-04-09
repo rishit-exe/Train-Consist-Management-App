@@ -62,24 +62,50 @@ public class Train {
     }
 
     static class GoodsBogie {
-        String type;
+        String shape;
         String cargo;
 
+        GoodsBogie(String shape) {
+            this.shape = shape;
+        }
 
-        GoodsBogie(String type, String cargo){
-            this.type = type;
-            this.cargo = cargo;
+        void assignCargo(String cargo) {
+            try {
+                if (shape.equalsIgnoreCase("rectangular") &&
+                        cargo.equalsIgnoreCase("petroleum")) {
+
+                    throw new CargoSafetyException(
+                            "Unsafe cargo assignment!"
+                    );
+                }
+
+                this.cargo = cargo;
+                System.out.println("Cargo assigned successfully: " + cargo);
+
+            } catch (CargoSafetyException e) {
+                System.out.println("Error: " + e.getMessage());
+
+            } finally {
+                System.out.println("Cargo validation completed for " + shape + " bogie\n");
+            }
         }
     }
 
     static boolean allMatch(List<GoodsBogie> goodsBogies) {
         return goodsBogies.stream().allMatch(bogie ->
                 bogie != null
-                        && bogie.type != null
+                        && bogie.shape != null
                         && bogie.cargo != null
-                        && (!"Cylindrical".equalsIgnoreCase(bogie.type)
+                        && (!"Cylindrical".equalsIgnoreCase(bogie.shape)
                         || "Petroleum".equalsIgnoreCase(bogie.cargo))
         );
+    }
+
+    //Custom Runtime
+    static class CargoSafetyException extends RuntimeException{
+        public CargoSafetyException(String message) {
+            super(message);
+        }
     }
 
     public static void main(String[] args) {
@@ -295,19 +321,27 @@ public class Train {
 
 
         System.out.println("\n\n========================================");
-        System.out.println("  Safety Compliance Check for Goods Bogies (UC12)");
+        System.out.println("  Safety Compliance Check for Goods Bogies & Runtime Handling (UC12) & (UC15)");
         System.out.println("========================================\n");
 
         List<GoodsBogie> goodsBogies = new ArrayList<>();
+        GoodsBogie bogie1 = new GoodsBogie("Cylindrical");
+        GoodsBogie bogie2 = new GoodsBogie("Open");
+        GoodsBogie bogie3 = new GoodsBogie("Box");
+        GoodsBogie bogie4 = new GoodsBogie("Cylindrical");
 
-        goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
-        goodsBogies.add(new GoodsBogie("Open", "Coal"));
-        goodsBogies.add(new GoodsBogie("Box", "Grain"));
-        goodsBogies.add(new GoodsBogie("Cylindrical", "Coal"));
+        bogie1.assignCargo("Petroleum");
+        bogie2.assignCargo("Coal");
+        bogie3.assignCargo("Grain");
+        bogie4.assignCargo("Coal");
+
+        // Unsafe case
+        GoodsBogie bogie5 = new GoodsBogie("Rectangular");
+        bogie5.assignCargo("Petroleum");
 
         System.out.println("Goods Bogies in Train: ");
         for(GoodsBogie bogieX : goodsBogies){
-            System.out.println(bogieX.cargo + " -> " + bogieX.type);
+            System.out.println(bogieX.cargo + " -> " + bogieX.shape);
         }
 
         boolean safetyCompliant = allMatch(goodsBogies);
@@ -375,6 +409,9 @@ public class Train {
         }
 
         System.out.println("\nException handling completed... (UC14)");
+
+
+        System.out.println("\nRuntime handling completed... (UC15)");
 
     }
 }

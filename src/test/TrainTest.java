@@ -331,28 +331,28 @@ class TrainTest {
     @Test
     void testSafety_AllBogiesValid() {
         List<Train.GoodsBogie> goodsBogies = List.of(
-                new Train.GoodsBogie("Cylindrical", "Petroleum"),
-                new Train.GoodsBogie("Open", "Coal"),
-                new Train.GoodsBogie("Box", "Grain")
+                createBogie("Cylindrical", "Petroleum"),
+                createBogie("Open", "Coal"),
+                createBogie("Box", "Grain")
         );
 
         assertTrue(Train.allMatch(goodsBogies));
     }
 
     @Test
-    void testSafety_CylindricalWithInvalidCargo() {
+    void testSafety_RectangularWithInvalidCargo() {
         List<Train.GoodsBogie> goodsBogies = List.of(
-                new Train.GoodsBogie("Cylindrical", "Coal")
+                createBogie("Rectangular", "Petroleum")
         );
 
         assertFalse(Train.allMatch(goodsBogies));
     }
 
     @Test
-    void testSafety_NonCylindricalBogiesAllowed() {
+    void testSafety_NonRectangularBogiesAllowed() {
         List<Train.GoodsBogie> goodsBogies = List.of(
-                new Train.GoodsBogie("Open", "Coal"),
-                new Train.GoodsBogie("Box", "Grain")
+                createBogie("Open", "Coal"),
+                createBogie("Box", "Grain")
         );
 
         assertTrue(Train.allMatch(goodsBogies));
@@ -361,12 +361,17 @@ class TrainTest {
     @Test
     void testSafety_MixedBogiesWithViolation() {
         List<Train.GoodsBogie> goodsBogies = List.of(
-                new Train.GoodsBogie("Cylindrical", "Petroleum"),
-                new Train.GoodsBogie("Open", "Coal"),
-                new Train.GoodsBogie("Cylindrical", "Grain")
+                createBogie("Rectangular", "Petroleum"), // invalid
+                createBogie("Open", "Coal"),
+                createBogie("Box", "Grain")
         );
 
         assertFalse(Train.allMatch(goodsBogies));
+    }
+    private Train.GoodsBogie createBogie(String shape, String cargo) {
+        Train.GoodsBogie bogie = new Train.GoodsBogie(shape);
+        bogie.assignCargo(cargo);
+        return bogie;
     }
 
     @Test
@@ -500,4 +505,47 @@ class TrainTest {
         });
     }
 
+
+    //UC15 - Runtime Handling
+    @Test
+    void testCargo_SafeAssignment() {
+        Train.GoodsBogie bogie = new Train.GoodsBogie("Cylindrical");
+
+        bogie.assignCargo("Petroleum");
+        assertEquals("Petroleum", bogie.cargo);
+    }
+
+    @Test
+    void testCargo_UnsafeAssignmentHandled() {
+        Train.GoodsBogie bogie = new Train.GoodsBogie("Rectangular");
+
+        assertDoesNotThrow(() -> bogie.assignCargo("Petroleum"));
+        assertNull(bogie.cargo);
+    }
+
+    @Test
+    void testCargo_CargoNotAssignedAfterFailure() {
+        Train.GoodsBogie bogie = new Train.GoodsBogie("Rectangular");
+
+        bogie.assignCargo("Petroleum");
+        assertNull(bogie.cargo);
+    }
+
+    @Test
+    void testCargo_ProgramContinuesAfterException() {
+        Train.GoodsBogie bogie1 = new Train.GoodsBogie("Rectangular");
+        Train.GoodsBogie bogie2 = new Train.GoodsBogie("Cylindrical");
+
+        bogie1.assignCargo("Petroleum");
+        bogie2.assignCargo("Petroleum");
+        assertEquals("Petroleum", bogie2.cargo);
+    }
+
+    @Test
+    void testCargo_FinallyBlockExecution() {
+        Train.GoodsBogie bogie = new Train.GoodsBogie("Rectangular");
+
+        assertDoesNotThrow(() -> bogie.assignCargo("Petroleum"));
+        assertTrue(true);
+    }
 }
